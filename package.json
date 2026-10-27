@@ -1,0 +1,21 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "Shri Hari Enterprises",
+  "homepage": "https://github.com/mailmeatdarshan/SHE-c-auth-service#readme",
+  "bugs": {
+    "url": "https://github.com/mailmeatdarshan/SHE-c-auth-service/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mailmeatdarshan/SHE-c-auth-service.git"
+  },
+  "license": "ISC",
+  "author": "Darshan Dubey <mailmeatdarshan@gmail.com>",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
