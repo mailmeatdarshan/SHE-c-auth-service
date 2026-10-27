@@ -2,4 +2,4 @@ function welcome(name: string) {
     console.log("Welcome, " + name)
 }
 
-welcome("Darshan")
+welcome("Darshan Dubey")
