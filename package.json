@@ -18,11 +18,16 @@
         "dev": "node src/server.ts",
         "format:fix": "prettier . --write",
         "format:check": "prettier . --check",
+        "lint:fix":"eslint . --fix",
+        "lint:check":"eslint .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "devDependencies": {
+        "@eslint/js": "^10.0.1",
         "@types/node": "^26.6.5",
+        "eslint": "^10.13.0",
         "prettier": "3.9.10",
-        "typescript": "^7.0.2"
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.72.1"
     }
 }
