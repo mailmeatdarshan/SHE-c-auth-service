@@ -1,25 +1,28 @@
 {
-  "name": "auth-service",
-  "version": "1.0.0",
-  "description": "Shri Hari Enterprises",
-  "homepage": "https://github.com/mailmeatdarshan/SHE-c-auth-service#readme",
-  "bugs": {
-    "url": "https://github.com/mailmeatdarshan/SHE-c-auth-service/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mailmeatdarshan/SHE-c-auth-service.git"
-  },
-  "license": "ISC",
-  "author": "Darshan Dubey <mailmeatdarshan@gmail.com>",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "dev": "node src/server.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "@types/node": "^26.6.5",
-    "typescript": "^7.0.2"
-  }
+    "name": "auth-service",
+    "version": "1.0.0",
+    "description": "Shri Hari Enterprises",
+    "homepage": "https://github.com/mailmeatdarshan/SHE-c-auth-service#readme",
+    "bugs": {
+        "url": "https://github.com/mailmeatdarshan/SHE-c-auth-service/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mailmeatdarshan/SHE-c-auth-service.git"
+    },
+    "license": "ISC",
+    "author": "Darshan Dubey <mailmeatdarshan@gmail.com>",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "dev": "node src/server.ts",
+        "format:fix": "prettier . --write",
+        "format:check": "prettier . --check",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "@types/node": "^26.6.5",
+        "prettier": "3.9.10",
+        "typescript": "^7.0.2"
+    }
 }
