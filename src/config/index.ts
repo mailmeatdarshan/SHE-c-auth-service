@@ -1,5 +1,5 @@
 import { config } from "dotenv"
-config()
+config({ quiet: true })
 
 const { PORT, NODE_ENV } = process.env
 
