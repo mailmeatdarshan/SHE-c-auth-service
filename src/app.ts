@@ -11,6 +11,8 @@ import "reflect-metadata"
 
 const app = express()
 
+app.use(express.json())
+
 app.get("/", (req, res) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const err = createHttpError(401, "You cant access this route")
