@@ -4,6 +4,7 @@ import type { NextFunction, Request, Response } from "express"
 import { UserService } from "../services/UserService.js"
 import type { UserData } from "../types/index.js"
 import type { Logger } from "winston"
+import { validationResult } from "express-validator/lib/validation-result.js"
 
 interface RegisterUserRequest extends Request {
     body: UserData
@@ -19,6 +20,12 @@ export class AuthController {
         res: Response,
         next: NextFunction,
     ) {
+        const result = validationResult(req)
+        if (!result.isEmpty()) {
+            res.status(400).json({ errors: result.array() })
+            return
+        }
+
         const { firstname, lastname, email, password } = req.body
         this.logger.debug("New request to register user", {
             firstname,
