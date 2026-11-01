@@ -198,4 +198,25 @@ describe("POST /auth/register", () => {
             expect(users).toHaveLength(0)
         })
     })
+
+    describe("Invalid email format", () => {
+        it("should trim the email field", async () => {
+            //Arrange
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: " darshan@gmail.com ",
+                password: "secret",
+            }
+
+            //Act
+            await request(app).post("/auth/register").send(userData)
+
+            //Assert
+            const userRepository = connection.getRepository(User)
+            const users = await userRepository.find()
+            const user = users[0]
+            expect(user?.email).toBe("darshan@gmail.com")
+        })
+    })
 })
