@@ -2,16 +2,27 @@ import type { Repository } from "typeorm"
 import { User } from "../entities/User.js"
 import type { UserData } from "../types/index.js"
 import { Roles } from "../constants/index.js"
+import createHttpError from "http-errors"
+import bcrypt from "bcrypt"
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
     async create({ firstname, lastname, email, password }: UserData) {
-        return await this.userRepository.save({
-            firstname,
-            lastname,
-            email,
-            password,
-            role: Roles.CUSTOMER, // Assigning default role as CUSTOMER
-        })
+        //Hash the password
+        const saltRounds = 10
+        const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+        try {
+            return await this.userRepository.save({
+                firstname,
+                lastname,
+                email,
+                password: hashedPassword,
+                role: Roles.CUSTOMER, // Assigning default role as CUSTOMER
+            })
+        } catch {
+            const error = createHttpError(500, "Error creating user")
+            throw error
+        }
     }
 }
