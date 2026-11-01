@@ -145,6 +145,34 @@ describe("POST /auth/register", () => {
             expect(users[0]?.password).toHaveLength(60) // bcrypt hash length
             expect(users[0]?.password).toMatch(/^\$2[ayb]\$.{56}$/) // bcrypt hash format
         })
+
+        it("Should return 409 status code if email already exists", async () => {
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: "darshan@gmail.com",
+                password: "secret",
+            }
+
+            const userRepository = connection.getRepository(User)
+            await userRepository.save({
+                ...userData,
+                role: Roles.CUSTOMER,
+                password: "hashedPassword",
+            })
+
+            //Act
+            await request(app).post("/auth/register").send(userData)
+
+            //Assert
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData)
+
+            const users = await userRepository.find()
+            expect(response.status).toBe(409)
+            expect(users).toHaveLength(1)
+        })
     })
     describe("Fields are missing", () => {})
 })
