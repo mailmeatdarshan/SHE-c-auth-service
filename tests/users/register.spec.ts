@@ -2,8 +2,8 @@ import request from "supertest"
 import app from "../../src/app.js"
 import type { DataSource } from "typeorm"
 import { AppDataSource } from "../../src/data-source.js"
-import { truncateTables } from "../utils/index.js"
 import { User } from "../../src/entities/User.js"
+import { Roles } from "../../src/constants/index.js"
 
 describe("POST /auth/register", () => {
     describe("Given all fields", () => {
@@ -15,7 +15,8 @@ describe("POST /auth/register", () => {
 
         beforeEach(async () => {
             // DB truncate
-            await truncateTables(connection)
+            await connection.dropDatabase()
+            await connection.synchronize()
         })
 
         afterAll(async () => {
@@ -102,6 +103,28 @@ describe("POST /auth/register", () => {
 
             //Assert
             expect((response.body as Record<string, string>).id).toBeDefined()
+        })
+
+        it("Should assign a customer role", async () => {
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: "darshan@gmail.com",
+                password: "secret",
+            }
+
+            //Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData)
+
+            //Assert
+            expect((response.body as Record<string, string>).id).toBeDefined()
+
+            const userRepository = connection.getRepository(User)
+            const users = await userRepository.find()
+            expect(users[0]).toHaveProperty("role")
+            expect(users[0]?.role).toBe(Roles.CUSTOMER)
         })
     })
 })

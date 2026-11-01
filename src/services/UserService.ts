@@ -1,6 +1,7 @@
 import type { Repository } from "typeorm"
 import { User } from "../entities/User.js"
 import type { UserData } from "../types/index.js"
+import { Roles } from "../constants/index.js"
 
 export class UserService {
     constructor(private userRepository: Repository<User>) {}
@@ -10,6 +11,7 @@ export class UserService {
             lastname,
             email,
             password,
+            role: Roles.CUSTOMER, // Assigning default role as CUSTOMER
         })
     }
 }

@@ -25,7 +25,8 @@ export const AppDataSource = new DataSource({
     database: requiredConfig("DB_NAME", Config.DB_NAME),
 
     //Dont use this in production - this will drop and recreate your database on every application launch
-    synchronize: Config.NODE_ENV === "dev" || Config.NODE_ENV === "test",
+    // synchronize: Config.NODE_ENV === "dev" || Config.NODE_ENV === "test",
+    synchronize: false,
     logging: false,
     entities: [User],
     migrations: [],
