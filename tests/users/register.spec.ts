@@ -86,6 +86,23 @@ describe("POST /auth/register", () => {
             expect(users[0]?.lastname).toBe(userData.lastname)
             expect(users[0]?.email).toBe(userData.email)
         })
+
+        it("Should return an ID of the created user", async () => {
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: "darshan@gmail.com",
+                password: "secret",
+            }
+
+            //Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData)
+
+            //Assert
+            expect((response.body as Record<string, string>).id).toBeDefined()
+        })
     })
 })
 
