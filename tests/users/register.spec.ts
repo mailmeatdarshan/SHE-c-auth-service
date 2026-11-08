@@ -4,18 +4,19 @@ import type { DataSource } from "typeorm"
 import { AppDataSource } from "../../src/data-source.js"
 import { User } from "../../src/entities/User.js"
 import { Roles } from "../../src/constants/index.js"
+import { isJWT, truncateTables } from "../utils/index.js"
 
 describe("POST /auth/register", () => {
     let connection: DataSource
 
     beforeAll(async () => {
         connection = await AppDataSource.initialize()
+        await connection.synchronize(true)
     })
 
     beforeEach(async () => {
         // DB truncate
-        await connection.dropDatabase()
-        await connection.synchronize()
+        await truncateTables(connection)
     })
 
     afterAll(async () => {
@@ -172,6 +173,45 @@ describe("POST /auth/register", () => {
             const users = await userRepository.find()
             expect(response.status).toBe(409)
             expect(users).toHaveLength(1)
+        })
+
+        it("Should return the access token and refresh token inside a cookie", async () => {
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: "darshan@gmail.com",
+                password: "secret123",
+            }
+
+            //Act
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData)
+
+            interface Headers {
+                ["set-cookie"]?: string[]
+            }
+            //Assert
+            let accessToken: string | null = null
+            let refreshToken: string | null = null
+
+            expect(response.status).toBe(201)
+            const cookies = (response.headers as Headers)["set-cookie"] || []
+
+            cookies.forEach((cookie) => {
+                if (cookie.startsWith("accessToken=")) {
+                    accessToken = cookie.split(";")[0]?.split("=")[1] ?? null
+                }
+
+                if (cookie.startsWith("refreshToken=")) {
+                    refreshToken = cookie.split(";")[0]?.split("=")[1] ?? null
+                }
+            })
+            expect(accessToken).not.toBeNull()
+            expect(refreshToken).not.toBeNull()
+
+            expect(isJWT(accessToken)).toBeTruthy()
+            expect(isJWT(refreshToken)).toBeTruthy()
         })
     })
     describe("Fields are missing", () => {

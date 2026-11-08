@@ -7,3 +7,8 @@ export const truncateTables = async (connection: DataSource) => {
         await repository.clear()
     }
 }
+
+export const isJWT = (token: string | null | undefined): boolean => {
+    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/
+    return !!token && jwtRegex.test(token)
+}

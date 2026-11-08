@@ -16,12 +16,24 @@ export default defineConfig([
         ],
         languageOptions: {
             parserOptions: {
-                projectService: true,
+                projectService: {
+                    allowDefaultProject: ["scripts/*.js"],
+                },
             },
         },
         rules: {
             // 'no-console':'off',
             // 'dot-notation':'error',
+        },
+    },
+    {
+        files: ["**/*.js", "**/*.mjs", "**/*.cjs"],
+        extends: [tseslint.configs.disableTypeChecked],
+        languageOptions: {
+            globals: {
+                console: "readonly",
+                process: "readonly",
+            },
         },
     },
 ])
