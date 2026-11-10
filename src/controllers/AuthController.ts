@@ -4,7 +4,8 @@ import type { NextFunction, Request, Response } from "express"
 import fs from "fs"
 import path from "path"
 import { UserService } from "../services/UserService.js"
-import { sign, type JwtPayload } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
+import type { JwtPayload } from "jsonwebtoken"
 import type { UserData } from "../types/index.js"
 import type { Logger } from "winston"
 import { validationResult } from "express-validator/lib/validation-result.js"
@@ -66,7 +67,7 @@ export class AuthController {
                 role: user.role,
             }
 
-            const accessToken = sign(payload, privateKey, {
+            const accessToken = jwt.sign(payload, privateKey, {
                 expiresIn: "15m",
                 algorithm: "RS256",
                 issuer: "auth-service",
@@ -80,12 +81,16 @@ export class AuthController {
                 expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             })
 
-            const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
-                algorithm: "HS256",
-                expiresIn: "7d",
-                issuer: "auth-service",
-                jwtid: String(newReferenceToken.id), // Use the ID of the saved refresh token as the JWT ID
-            })
+            const refreshToken = jwt.sign(
+                payload,
+                Config.REFRESH_TOKEN_SECRET!,
+                {
+                    algorithm: "HS256",
+                    expiresIn: "7d",
+                    issuer: "auth-service",
+                    jwtid: String(newReferenceToken.id), // Use the ID of the saved refresh token as the JWT ID
+                },
+            )
             // const accessToken = await this.userService.generateAccessToken(user)
             // const refreshToken = await this.userService.generateRefreshToken(user)
 
