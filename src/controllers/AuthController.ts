@@ -10,6 +10,7 @@ import type { Logger } from "winston"
 import { validationResult } from "express-validator/lib/validation-result.js"
 import createHttpError from "http-errors"
 import { Config } from "../config/index.js"
+import { AppDataSource } from "../data-source.js"
 
 interface RegisterUserRequest extends Request {
     body: UserData
@@ -70,10 +71,20 @@ export class AuthController {
                 algorithm: "RS256",
                 issuer: "auth-service",
             })
+
+            // Persist the refresh token in the database
+            const refreshTokenRepository =
+                AppDataSource.getRepository("RefreshToken")
+            const newReferenceToken = await refreshTokenRepository.save({
+                user: user,
+                expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+            })
+
             const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
                 algorithm: "HS256",
                 expiresIn: "7d",
                 issuer: "auth-service",
+                jwtid: String(newReferenceToken.id), // Use the ID of the saved refresh token as the JWT ID
             })
             // const accessToken = await this.userService.generateAccessToken(user)
             // const refreshToken = await this.userService.generateRefreshToken(user)

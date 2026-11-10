@@ -2,6 +2,7 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./entities/User.js"
 import { Config } from "./config/index.js"
+import { RefreshToken } from "./entities/RefreshToken.js"
 
 function requiredConfig(name: string, value: string | undefined): string {
     if (!value) {
@@ -28,7 +29,7 @@ export const AppDataSource = new DataSource({
     // synchronize: Config.NODE_ENV === "dev" || Config.NODE_ENV === "test",
     synchronize: false,
     logging: false,
-    entities: [User],
+    entities: [User, RefreshToken],
     migrations: [],
     subscribers: [],
 })
