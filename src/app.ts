@@ -7,10 +7,12 @@ import logger from "./config/logger.js"
 import type { HttpError } from "http-errors"
 import createHttpError from "http-errors"
 import authRouter from "./routes/auth.js"
+import cookieParser from "cookie-parser"
 import "reflect-metadata"
 
 const app = express()
 
+app.use(cookieParser())
 app.use(express.json())
 
 app.get("/", (req, res) => {

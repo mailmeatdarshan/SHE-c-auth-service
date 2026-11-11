@@ -10,6 +10,8 @@ import RegisterValidator from "../validators/register-validator.js"
 import LoginValidator from "../validators/login-validator.js"
 import { CredentialService } from "../services/CredentialService.js"
 import { TokenService } from "../services/TokenService.js"
+import authenticate from "../middlewares/authenticate.js"
+import type { AuthRequest } from "../types/index.js"
 
 const router = express.Router()
 const userRepository = AppDataSource.getRepository(User)
@@ -36,6 +38,10 @@ router.post(
     LoginValidator,
     (req: Request, res: Response, next: NextFunction) =>
         authController.login(req, res, next),
+)
+
+router.get("/self", authenticate, (req: Request, res: Response) =>
+    authController.self(req as AuthRequest, res),
 )
 
 export default router

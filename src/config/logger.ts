@@ -38,7 +38,7 @@ const logger = winston.createLogger({
                 winston.format.json(),
                 winston.format.prettyPrint(),
             ),
-            silent: Config.NODE_ENV === "prod",
+            silent: Config.NODE_ENV === "test",
         }),
     ],
 })
