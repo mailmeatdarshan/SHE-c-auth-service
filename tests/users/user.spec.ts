@@ -71,6 +71,25 @@ describe("GET /auth/self", () => {
             expect((response.body as Record<string, string>).id).toBe(data.id)
             expect(response.body).not.toHaveProperty("password")
         })
+
+        it("should return 401 status code if token does not exists", async () => {
+            const userData = {
+                firstname: "Darshan",
+                lastname: "Dubey",
+                email: "darshan@gmail.com",
+                password: "secret123",
+            }
+
+            const userRepository = connection.getRepository(User)
+            await userRepository.save({
+                ...userData,
+                role: Roles.CUSTOMER,
+            })
+
+            const response = await request(app).get("/auth/self").send()
+
+            expect(response.statusCode).toBe(401)
+        })
     })
 
     describe("Fields are missing", () => {})
