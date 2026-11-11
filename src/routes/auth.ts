@@ -12,6 +12,7 @@ import { CredentialService } from "../services/CredentialService.js"
 import { TokenService } from "../services/TokenService.js"
 import authenticate from "../middlewares/authenticate.js"
 import type { AuthRequest } from "../types/index.js"
+import validateRefreshToken from "../middlewares/validateRefreshToken.js"
 
 const router = express.Router()
 const userRepository = AppDataSource.getRepository(User)
@@ -42,6 +43,13 @@ router.post(
 
 router.get("/self", authenticate, (req: Request, res: Response) =>
     authController.self(req as AuthRequest, res),
+)
+
+router.post(
+    "/refresh",
+    validateRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.refresh(req as AuthRequest, res, next),
 )
 
 export default router

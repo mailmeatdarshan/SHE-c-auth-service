@@ -33,12 +33,16 @@ export class TokenService {
     }
 
     generateRefreshToken(payload: JwtPayload, jwtId: string): string {
-        const refreshToken = jwt.sign(payload, Config.REFRESH_TOKEN_SECRET!, {
-            algorithm: "HS256",
-            expiresIn: "7d",
-            issuer: "auth-service",
-            jwtid: jwtId,
-        })
+        const refreshToken = jwt.sign(
+            { ...payload, id: jwtId },
+            Config.REFRESH_TOKEN_SECRET!,
+            {
+                algorithm: "HS256",
+                expiresIn: "7d",
+                issuer: "auth-service",
+                jwtid: jwtId,
+            },
+        )
 
         return refreshToken
     }
@@ -51,5 +55,9 @@ export class TokenService {
         })
 
         return newRefreshToken
+    }
+
+    async deleteRefreshToken(tokenId: number) {
+        return await this.refreshTokenRepository.delete({ id: tokenId })
     }
 }
