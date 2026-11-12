@@ -13,6 +13,7 @@ import { TokenService } from "../services/TokenService.js"
 import authenticate from "../middlewares/authenticate.js"
 import type { AuthRequest } from "../types/index.js"
 import validateRefreshToken from "../middlewares/validateRefreshToken.js"
+import parseRefreshToken from "../middlewares/parseRefreshToken.js"
 
 const router = express.Router()
 const userRepository = AppDataSource.getRepository(User)
@@ -50,6 +51,14 @@ router.post(
     validateRefreshToken,
     (req: Request, res: Response, next: NextFunction) =>
         authController.refresh(req as AuthRequest, res, next),
+)
+
+router.post(
+    "/logout",
+    authenticate,
+    parseRefreshToken,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.logout(req as AuthRequest, res, next),
 )
 
 export default router
