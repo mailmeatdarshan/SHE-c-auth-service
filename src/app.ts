@@ -7,6 +7,7 @@ import logger from "./config/logger.js"
 import type { HttpError } from "http-errors"
 import createHttpError from "http-errors"
 import authRouter from "./routes/auth.js"
+import userRouter from "./routes/user.js"
 import cookieParser from "cookie-parser"
 import "reflect-metadata"
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/auth", authRouter)
+app.use("/users", userRouter)
 
 // global error handler
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

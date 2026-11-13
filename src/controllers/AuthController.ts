@@ -7,6 +7,7 @@ import { validationResult } from "express-validator"
 import createHttpError from "http-errors"
 import type { CredentialService } from "../services/CredentialService.js"
 import type { TokenService } from "../services/TokenService.js"
+import { Roles } from "../constants/index.js"
 
 interface RegisterUserRequest extends Request {
     body: UserData
@@ -47,6 +48,7 @@ export class AuthController {
                 lastname,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             })
             this.logger.info(`User has been registered with ID: ${user.id}`)
 
