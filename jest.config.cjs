@@ -13,7 +13,7 @@ module.exports = {
         "src/**/*.ts",
         "!tests**",
         "!**/node_modules/**",
-        "!dist/**"
+        "!dist/**",
     ],
-    coverageProvider:"v8",
+    coverageProvider: "v8",
 }
