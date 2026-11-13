@@ -43,5 +43,6 @@
         "skipLibCheck": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true
-    }
+    },
+    "exclude": ["dist", "node_modules"]
 }
