@@ -8,4 +8,12 @@ module.exports = {
     moduleNameMapper: {
         "^(\\.{1,2}/.*)\\.js$": "$1",
     },
+    collectCoverage: true,
+    collectCoverageFrom: [
+        "src/**/*.ts",
+        "!tests**",
+        "!**/node_modules/**",
+        "!dist/**"
+    ],
+    coverageProvider:"v8",
 }
