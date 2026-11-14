@@ -13,6 +13,8 @@ import "reflect-metadata"
 
 const app = express()
 
+app.disable("x-powered-by")
+
 app.use(express.static("public", { dotfiles: "allow" }))
 app.use(cookieParser())
 app.use(express.json())
