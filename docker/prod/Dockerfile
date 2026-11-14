@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 COPY . .
 
@@ -22,6 +22,8 @@ COPY package*.json ./
 RUN npm ci --ignore-scripts
 
 COPY --from=builder /app/dist ./
+
+USER node
 
 EXPOSE 5001
 
