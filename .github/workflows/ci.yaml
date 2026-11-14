@@ -13,6 +13,21 @@ jobs:
         name: Build the project
         runs-on: ubuntu-latest
 
+        services:
+            postgres:
+                image: postgres:16-alpine
+                env:
+                    POSTGRES_USER: root
+                    POSTGRES_PASSWORD: root
+                    POSTGRES_DB: she_auth_service_test
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             - uses: actions/checkout@v4
 
@@ -32,13 +47,13 @@ jobs:
               run: npm run test
               env:
                   NODE_ENV: test
-                  DB_HOST: ${{ secrets.TEST_DB_HOST }}
-                  DB_PORT: ${{ secrets.TEST_DB_PORT }}
-                  DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
-                  DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
-                  DB_NAME: ${{ secrets.TEST_DB_NAME }}
-                  REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
-                  JWKS_URI: ${{ secrets.JWKS_URI }}
+                  DB_HOST: 127.0.0.1
+                  DB_PORT: 5432
+                  DB_USERNAME: root
+                  DB_PASSWORD: root
+                  DB_NAME: she_auth_service_test
+                  REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET || 'authservicerefreshtokensecret' }}
+                  JWKS_URI: ${{ secrets.JWKS_URI || 'http://localhost:5001/.well-known/jwks.json' }}
                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
             - name: Build-ts

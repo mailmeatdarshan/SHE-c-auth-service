@@ -29,7 +29,9 @@ describe("GET /auth/self", () => {
     })
 
     afterAll(async () => {
-        await connection.destroy()
+        if (connection && connection.isInitialized) {
+            await connection.destroy()
+        }
     })
 
     describe("Given all fields", () => {
