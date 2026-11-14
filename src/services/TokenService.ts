@@ -1,4 +1,6 @@
 import type { Repository } from "typeorm"
+import fs from "fs"
+import path from "path"
 import jwt from "jsonwebtoken"
 import type { JwtPayload } from "jsonwebtoken"
 import createHttpError from "http-errors"
@@ -12,14 +14,17 @@ export class TokenService {
     generateAccessToken(payload: JwtPayload): string {
         let privateKey: string
         if (!Config.PRIVATE_KEY) {
-            const error = createHttpError(500, "Private key not found")
-            throw error
-        }
-        try {
+            try {
+                privateKey = fs.readFileSync(
+                    path.join(import.meta.dirname, "../../certs/private.pem"),
+                    "utf8",
+                )
+            } catch {
+                const error = createHttpError(500, "Private key not found")
+                throw error
+            }
+        } else {
             privateKey = Config.PRIVATE_KEY
-        } catch {
-            const error = createHttpError(500, "Private key not found")
-            throw error
         }
 
         const accessToken = jwt.sign(payload, privateKey, {
