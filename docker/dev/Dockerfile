@@ -10,8 +10,10 @@ COPY package*.json ./
 # install app dependencies with locked versions and ignore scripts
 RUN npm ci --ignore-scripts
 
-# Copy the rest of our app's source code into the container
-COPY --chown=node:node . .
+# Copy the app source code into the container
+COPY --chown=node:node src ./src
+COPY --chown=node:node public ./public
+COPY --chown=node:node tsconfig*.json ./
 
 USER node
 

@@ -6,7 +6,9 @@ COPY package*.json ./
 
 RUN npm ci --ignore-scripts
 
-COPY . .
+COPY src ./src
+COPY public ./public
+COPY tsconfig*.json ./
 
 RUN npm run build
 
