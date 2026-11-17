@@ -9,12 +9,20 @@ import createHttpError from "http-errors"
 import authRouter from "./routes/auth.js"
 import userRouter from "./routes/user.js"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 import "reflect-metadata"
 
 const app = express()
 
 app.disable("x-powered-by")
 
+app.use(
+    cors({
+        //todo: move to .env file yeh env se aani chahiye
+        origin: ["http://localhost:5173"],
+        credentials: true,
+    }),
+)
 app.use(express.static("public", { dotfiles: "allow" }))
 app.use(cookieParser())
 app.use(express.json())
