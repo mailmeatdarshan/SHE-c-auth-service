@@ -11,6 +11,7 @@ import { UserService } from "../services/UserService.js"
 import { AppDataSource } from "../data-source.js"
 import { User } from "../entities/User.js"
 import type { CreateUserRequest } from "../types/index.js"
+import listUsersValidator from "../validators/list-users-validator.js"
 
 const router = express.Router()
 
@@ -24,6 +25,15 @@ router.post(
     canAccess([Roles.ADMIN]),
     (req: Request, res: Response, next: NextFunction) =>
         userController.create(req as CreateUserRequest, res, next),
+)
+
+router.get(
+    "/",
+    authenticate,
+    canAccess([Roles.ADMIN]),
+    listUsersValidator,
+    (req: Request, res: Response, next: NextFunction) =>
+        userController.getAll(req, res, next),
 )
 
 export default router
