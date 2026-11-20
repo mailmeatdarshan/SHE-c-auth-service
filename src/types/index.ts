@@ -39,3 +39,8 @@ export interface IRefreshTokenPayload {
 export interface CreateUserRequest extends Request {
     body: UserData
 }
+
+export interface ListUsersQuery {
+    perPage: number
+    currentPage: number
+}
